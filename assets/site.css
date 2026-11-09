@@ -8,14 +8,14 @@
   --plum-deep: #2a1a3d;
   --ink: #1c1128;
 
-  /* Fonts, matched to the poster:
-     wordmark  → bracketed serif           (Source Serif 4)
-     Open Call → tight Helvetica bold      (Helvetica Neue on Mac, Inter Tight elsewhere)
-     details   → thin condensed typewriter (Cutive Mono, squeezed with .sq / .sqi) */
-  --serif: "Source Serif 4", Georgia, serif;
-  --sans: "Helvetica Neue", Helvetica, "Inter Tight", Arial, sans-serif;
-  --mono: "Cutive Mono", "Courier New", monospace;
-  --squeeze: .74;
+  /* Fonts (the brand's own):
+     wordmark + headings → Georgia Regular
+     Open Call curtain   → Helvetica (stand-in for Area Regular until we have its web files)
+     details             → Xanh Mono     (Google Fonts) */
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "Xanh Mono", "Courier New", monospace;
+  --squeeze: 1;   /* .sq / .sqi used to squeeze the old typewriter font; 1 = no squeeze */
 
   --r-sm: 6px;   /* buttons, inputs */
   --r-md: 10px;  /* dialog */
@@ -70,9 +70,8 @@ svg { color: var(--cream); }
 }
 .wm {
   font-family: var(--serif);
-  font-weight: 600;
-  letter-spacing: -.035em;
-  font-variation-settings: "opsz" 60;
+  font-weight: 400;
+  letter-spacing: -.01em;
   white-space: nowrap;
 }
 
@@ -89,7 +88,7 @@ svg { color: var(--cream); }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 .brand svg.mark-sm { width: 52px; height: auto; }
 .brand .wm { font-size: 22px; }
-.nav ul { list-style: none; display: flex; gap: clamp(4px, 2vw, 20px); margin: 0; padding: 0; }
+.nav ul { list-style: none; display: flex; gap: clamp(16px, 2.4vw, 28px); margin: 0; padding: 0; }
 .nav a.link { text-decoration: none; font-size: 21px; opacity: .85; }
 .nav a.link:hover, .nav a.link[aria-current] { opacity: 1; text-shadow: 0 0 10px var(--glow); }
 
@@ -141,7 +140,7 @@ svg { color: var(--cream); }
 .hero-inner { position: relative; z-index: 1; max-width: 760px; width: 100%; }
 .hero .mark { width: min(460px, 80vw); margin: 0 auto; animation: breathe 6s ease-in-out infinite; }
 @keyframes breathe { 0%,100% { opacity: 1; } 50% { opacity: .85; } }
-.hero h1 { font-size: clamp(46px, 9.5vw, 104px); line-height: 1; margin: 28px 0 0; font-weight: 600; }
+.hero h1 { font-size: clamp(46px, 9.5vw, 104px); line-height: 1; margin: 28px 0 0; font-weight: 400; }
 .hero .lede { margin: 22px 0 34px; font-size: clamp(22px, 2.8vw, 28px); opacity: .92; }
 
 .contact {
@@ -155,7 +154,7 @@ svg { color: var(--cream); }
 }
 .aside { overflow: hidden; }
 .eyebrow { font-size: 19px; opacity: .75; margin: 0 0 8px; }
-.contact h2 { font-size: clamp(48px, 6.4vw, 78px); line-height: 1; margin: 0 0 18px; font-weight: 600; }
+.contact h2 { font-size: clamp(48px, 6.4vw, 78px); line-height: 1; margin: 0 0 18px; font-weight: 400; }
 .contact .aside .sq { margin: 0 0 18px; opacity: .92; }
 .mail-link {
   font-size: clamp(24px, 2.8vw, 30px);
@@ -174,7 +173,7 @@ form { display: grid; gap: 16px; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 label { display: grid; gap: 6px; font-size: 19px; opacity: .92; }
 input, select, textarea {
-  font: inherit; font-size: 18px; letter-spacing: -.04em;
+  font: inherit; font-size: 18px;
   color: var(--cream);
   background: rgba(255,244,220,.07);
   border: 1px solid rgba(255,244,220,.28);
@@ -228,7 +227,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
   position: relative;
   overflow: hidden;
   font-family: var(--sans);
-  font-weight: 700;
+  font-weight: 400;
   font-size: calc((100vw / var(--cols) - 24px) / 4.3);
   padding-left: 8px;
   line-height: .74;
@@ -294,9 +293,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
 .summons .mail a:hover { text-shadow: 0 0 12px var(--glow); }
 .invoke {
   margin-top: clamp(36px, 5vw, 56px);
-  font-family: var(--serif); font-weight: 600;
-  font-variation-settings: "opsz" 60;
-  letter-spacing: -.035em;
+  font-family: var(--serif); font-weight: 400;
+  letter-spacing: -.01em;
   font-size: clamp(40px, 6vw, 76px);
   line-height: 1;
   color: var(--cream);
@@ -339,7 +337,7 @@ dialog {
 dialog::backdrop { background: rgba(20,10,30,.72); backdrop-filter: blur(4px); }
 .dlg { padding: clamp(22px, 4vw, 36px); overflow: hidden; }
 .dlg-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
-.dlg-head h3 { font-size: clamp(30px, 5vw, 42px); line-height: 1; margin: 0; font-weight: 600; }
+.dlg-head h3 { font-size: clamp(30px, 5vw, 42px); line-height: 1; margin: 0; font-weight: 400; }
 .close {
   font: inherit; font-size: 19px; color: var(--cream); opacity: .7;
   background: none; border: 0; cursor: pointer; padding: 4px;
