@@ -1,7 +1,7 @@
-/* Optional: paste a form endpoint here (e.g. a free Formspree form URL like
-   "https://formspree.io/f/xxxxxxx") and submissions arrive straight in the inbox,
-   no email app needed. Leave empty to use the "choose how to send" step. */
-var FORM_ENDPOINT = "";
+/* Where the forms send to: the Cloudflare Worker in _worker/ that emails via Resend.
+   If it can't be reached, people get the "choose how to send" fallback instead.
+   Set to "" to always use that fallback. */
+var FORM_ENDPOINT = "https://forms.ilesolae.org";
 var TO = "admin@ilesolae.org";
 
 (function () {
@@ -72,14 +72,40 @@ var TO = "admin@ilesolae.org";
     $('viaApp').href = 'mailto:' + TO + '?subject=' + s + '&body=' + b;
   }
 
-  function send() {
-    if (!FORM_ENDPOINT) { open('panelSend'); return; }
+  var sendHint = $('sendHint');
+  var sendHintDefault = sendHint ? sendHint.textContent : '';
+
+  function fallback() {
+    if (sendHint) sendHint.textContent = FORM_ENDPOINT
+      ? 'We couldn’t send it from the site just now — choose another way. Your message is already written.'
+      : sendHintDefault;
+    open('panelSend');
+  }
+
+  function send(form) {
+    if (!FORM_ENDPOINT) { fallback(); return; }
+    var btn = form.querySelector('button[type=submit]');
+    var label = btn.querySelector('.sqi');
+    var was = label.textContent;
+    btn.disabled = true;
+    label.textContent = 'sending…';
+    fitSqueezed();
     fetch(FORM_ENDPOINT, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(Object.assign({ _subject: pending.subject }, pending.data))
-    }).then(function (r) { open(r.ok ? 'panelDone' : 'panelSend'); })
-      .catch(function () { open('panelSend'); });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pending.data)
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('send failed');
+        form.reset();
+        open('panelDone');
+      })
+      .catch(fallback)
+      .finally(function () {
+        btn.disabled = false;
+        label.textContent = was;
+        fitSqueezed();
+      });
   }
 
   $('viaCopy').addEventListener('click', function () {
@@ -98,6 +124,7 @@ var TO = "admin@ilesolae.org";
   if (submitForm) submitForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var d = grab(this);
+    d.kind = 'submission';
     var body =
       'Film title: ' + d.title + '\n' +
       'Running time: ' + d.runtime + '\n' +
@@ -106,16 +133,17 @@ var TO = "admin@ilesolae.org";
       '— ' + d.name + '\n' + d.email;
     prepare('Open Call Submission — ' + d.title, body, d);
     cameFromForm = true;
-    send();
+    send(this);
   });
 
   var contactForm = $('contactForm');
   if (contactForm) contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var d = grab(this);
+    d.kind = 'contact';
     prepare(d.topic + ' — ' + d.name, d.message + '\n\n— ' + d.name + '\n' + d.email, d);
     cameFromForm = false;
     title.textContent = '(send your message';
-    send();
+    send(this);
   });
 })();

@@ -212,8 +212,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
     linear-gradient(to bottom, transparent 60%, rgba(42,26,61,.8));
 }
 
-/* the tan "Open Call" curtain. Type is sized from the column width so each
-   line is always cut at "Open Ca…", like the poster, at any screen size. */
+/* the tan "Open Call" curtain. Type is sized from the column width so the full
+   words "Open Call" always fit in each column, at any screen size. */
 .curtain {
   --cols: 4;
   position: absolute; top: 0; left: 0; right: 0;
@@ -229,7 +229,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
   overflow: hidden;
   font-family: var(--sans);
   font-weight: 700;
-  font-size: calc(100vw / var(--cols) / 3.7);
+  font-size: calc((100vw / var(--cols) - 24px) / 4.3);
+  padding-left: 8px;
   line-height: .74;
   letter-spacing: -.055em;
   white-space: nowrap;
@@ -376,3 +377,7 @@ footer .sq { font-size: 18px; opacity: .6; margin: 0; }
   html { scroll-behavior: auto; }
   .hero .mark, .track, .rite .star, .invoke .ast, .done-mark { animation: none; }
 }
+
+/* spam trap: hidden from people, bots fill it in */
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.btn:disabled { opacity: .65; cursor: progress; }
