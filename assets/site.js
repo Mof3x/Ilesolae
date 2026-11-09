@@ -14,6 +14,26 @@ var TO = "admin@ilesolae.org";
     t.innerHTML = html;
   });
 
+  // ---- make the full words "Open Call" fit each curtain column, whatever font
+  // the browser ends up using (measures the real text instead of guessing)
+  function fitCurtain() {
+    var cols = document.querySelectorAll('.curtain-col');
+    if (!cols.length) return;
+    cols.forEach(function (c) { c.style.fontSize = ''; });
+    var col = cols[0], cs = getComputedStyle(col);
+    var probe = document.createElement('span');
+    probe.textContent = 'Open Call';
+    probe.style.cssText = 'position:absolute;visibility:hidden;display:inline-block;white-space:nowrap';
+    col.appendChild(probe);
+    var room = col.clientWidth - parseFloat(cs.paddingLeft) * 2;   // same gap on both sides
+    var size = parseFloat(cs.fontSize) * room / probe.getBoundingClientRect().width;
+    col.removeChild(probe);
+    if (size > 0) cols.forEach(function (c) { c.style.fontSize = size + 'px'; });
+  }
+  fitCurtain();
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fitCurtain);
+  window.addEventListener('resize', fitCurtain);
+
   // ---- size buttons/labels to their squeezed text
   function fitSqueezed() {
     var s = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--squeeze')) || 1;

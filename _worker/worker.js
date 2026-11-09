@@ -18,6 +18,9 @@ const FROM = "Ilè Solae website <website@ilesolae.org>";
 const ALLOWED_ORIGINS = [
   "https://ilesolae.org",
   "https://www.ilesolae.org",
+  // plain http too, in case someone reaches the site before HTTPS is enforced
+  "http://ilesolae.org",
+  "http://www.ilesolae.org",
 ];
 
 export default {

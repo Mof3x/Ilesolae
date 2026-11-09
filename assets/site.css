@@ -237,10 +237,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--c
   color: var(--cream);
   filter: drop-shadow(0 0 4px rgba(255,236,190,.6));
 }
-.curtain-col::after {   /* thick + thin rules, as on the poster */
-  content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 12px;
-  background: linear-gradient(to right, var(--tan) 0 2px, var(--cream) 2px 6px, var(--tan) 6px 9px, var(--cream) 9px 11px, var(--tan) 11px);
-}
 .track { animation: rise 80s linear infinite; }
 .curtain-col:nth-child(even) .track { animation-direction: reverse; animation-duration: 100s; }
 .track span { display: block; }
@@ -379,5 +375,5 @@ footer .sq { font-size: 18px; opacity: .6; margin: 0; }
 }
 
 /* spam trap: hidden from people, bots fill it in */
-.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.hp { display: none !important; }
 .btn:disabled { opacity: .65; cursor: progress; }
